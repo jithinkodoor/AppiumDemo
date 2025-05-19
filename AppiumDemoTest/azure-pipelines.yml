@@ -1,0 +1,58 @@
+trigger:
+  branches:
+    include:
+      - main
+      - develop
+
+variables:
+  buildConfiguration: 'Release'
+
+stages:
+  - stage: AndroidTest
+    displayName: Run Android Tests
+    jobs:
+      - job: Android
+        displayName: Android Tests
+        pool:
+          vmImage: 'windows-latest'
+
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '8.x'
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - script: dotnet restore
+            displayName: Restore packages
+
+          - script: dotnet build --configuration $(buildConfiguration)
+            displayName: Build solution
+
+          - script: dotnet test --configuration $(buildConfiguration) --no-build -- --platform android --environment dev
+            displayName: Run Android Tests
+
+  - stage: iOSTest
+    displayName: Run iOS Tests
+    jobs:
+      - job: iOS
+        displayName: iOS Tests
+        pool:
+          vmImage: 'windows-latest'
+
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: '8.x'
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - script: dotnet restore
+            displayName: Restore packages
+
+          - script: dotnet build --configuration $(buildConfiguration)
+            displayName: Build solution
+
+          - script: dotnet test --configuration $(buildConfiguration) --no-build -- --platform ios --environment dev
+            displayName: Run iOS Tests
+
