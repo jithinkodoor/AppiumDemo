@@ -10,7 +10,7 @@ public static class ConfigReader
         var args = Environment.GetCommandLineArgs();
         var cmdEnv = GetCommandLineArg(args, "--environment");
         var cmdPlatform = GetCommandLineArg(args, "--platform");
-        var envVarEnv = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
+        var envVarEnv = Environment.GetEnvironmentVariable("ENVIRONMENT");
 
         var baseConfig = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())

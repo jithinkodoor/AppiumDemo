@@ -105,11 +105,18 @@ namespace AppiumDemoTest.Features
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Verify and navigate in the mobile app")]
         [NUnit.Framework.CategoryAttribute("test")]
-        public async global::System.Threading.Tasks.Task VerifyAndNavigateInTheMobileApp()
+        [NUnit.Framework.TestCaseAttribute("3", null)]
+        public async global::System.Threading.Tasks.Task VerifyAndNavigateInTheMobileApp(string number, string[] exampleTags)
         {
-            string[] tagsOfScenario = new string[] {
+            string[] @__tags = new string[] {
                     "test"};
+            if ((exampleTags != null))
+            {
+                @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
+            }
+            string[] tagsOfScenario = @__tags;
             global::System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new global::System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("number", number);
             global::Reqnroll.ScenarioInfo scenarioInfo = new global::Reqnroll.ScenarioInfo("Verify and navigate in the mobile app", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 5
 this.ScenarioInitialize(scenarioInfo);
@@ -128,7 +135,10 @@ await testRunner.GivenAsync("the user has logged in to the mobile app", ((string
   await testRunner.AndAsync("user verifies the page title", ((string)(null)), ((global::Reqnroll.Table)(null)), "And ");
 #line hidden
 #line 8
- await testRunner.WhenAsync("the user adds the first product to the cart", ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+ await testRunner.WhenAsync(string.Format("the user adds the {0} product to the cart", number), ((string)(null)), ((global::Reqnroll.Table)(null)), "When ");
+#line hidden
+#line 9
+ await testRunner.ThenAsync(string.Format("user can see the  {0} of product in the cart", number), ((string)(null)), ((global::Reqnroll.Table)(null)), "Then ");
 #line hidden
             }
             await this.ScenarioCleanupAsync();

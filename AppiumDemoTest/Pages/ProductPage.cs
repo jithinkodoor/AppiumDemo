@@ -26,24 +26,28 @@ namespace AppiumDemoTest.Pages
         private By AddToCartButton => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
           ? MobileBy.XPath("//XCUIElementTypeOther[@name=\"Add To Cart button\"]")
           : MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Add To Cart button\"]");
-        private By cartCount => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
-            ? MobileBy.XPath("//XCUIElementTypeOther[@name='Add To Cart button']")
-            : MobileBy.XPath("//android.widget.TextView[@text=\"1\"]");
+        private String cartCount => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? "//XCUIElementTypeOther[@name='Add To Cart button']"
+            : "//android.widget.TextView[@text=\"{0}\"]";
 
 
-        public void AddFirstProductToCart()
+        public void AddProductToCart(int number)
         {
-            
-
             var firstProduct = (AppiumElement)wait.Until(driver => driver.FindElement(FirstProduct));
             firstProduct.Click();
-            var addToCartButton = (AppiumElement)wait.Until(driver => driver.FindElement(AddToCartButton));            
-            addToCartButton.Click();
-           
+
+            var addToCartButton = (AppiumElement)wait.Until(driver => driver.FindElement(AddToCartButton));
+
+            for (int i = 0; i < number; i++)
+            {
+                addToCartButton.Click();
+                Thread.Sleep(500); // Optional: wait a bit for UI to update between clicks
+            }
         }
-        public AppiumElement VerifyCartCount()
+        public AppiumElement VerifyCartCount(int number)
         {
-           return (AppiumElement)wait.Until(driver => driver.FindElement(cartCount));
+            By cartElemCount = MobileBy.XPath(String.Format(cartCount, number.ToString()));
+            return (AppiumElement)wait.Until(driver => driver.FindElement(cartElemCount));
         }
     }
 }

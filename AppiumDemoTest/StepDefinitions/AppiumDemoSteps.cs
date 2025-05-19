@@ -41,8 +41,19 @@ namespace AppiumDemoTest.StepDefinitions
         [When("the user adds the first product to the cart")]
         public void WhenTheUserAddsTheFirstProductToTheCart()
         {
-            productPage.AddFirstProductToCart();
-            Assert.That(productPage.VerifyCartCount(), Is.Not.Null, "Product not added to the cart"); 
+            
+        }
+
+        [When("the user adds the {int} product to the cart")]
+        public void WhenTheUserAddsTheProductToTheCart(int numberOfProducts)
+        {
+            productPage.AddProductToCart(numberOfProducts);
+            
+        }
+        [Then("user can see the  {int} of product in the cart")]
+        public void ThenUserCanSeeTheOfProductInTheCart(int numberOfProducts)
+        {
+            Assert.That(productPage.VerifyCartCount(numberOfProducts), Is.Not.Null, "Product not added to the cart");
         }
 
 
