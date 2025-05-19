@@ -175,7 +175,7 @@ curl -u "<username>:<access_key>" \
 
 You can override values using:
 
-* CLI: `--platform ios --env dev  
+* CLI: `--platform ios --ENVIRONMENT dev  
 * Env vars: `ENVIRONMENT`, `PLATFORM`
 
 ---
@@ -186,8 +186,6 @@ You can override values using:
 * Use platform-specific locators via `if (platform == "ios") ...`
 * Set `ParallelScope.All` to run tests concurrently
 
----
-
 
 ---
 
@@ -196,5 +194,3 @@ You can override values using:
 Raise an issue or contact the maintainer via GitHub.
 
 ---
-
-Happy testing! 🚀
