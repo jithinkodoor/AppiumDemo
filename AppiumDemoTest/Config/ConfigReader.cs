@@ -9,6 +9,7 @@ public static class ConfigReader
     {
         var args = Environment.GetCommandLineArgs();
         var cmdEnv = GetCommandLineArg(args, "--environment");
+        var cmdPlatform = GetCommandLineArg(args, "--platform");
         var envVarEnv = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
 
         var baseConfig = new ConfigurationBuilder()
@@ -17,12 +18,15 @@ public static class ConfigReader
             .Build();
 
         var configEnv = baseConfig["Environment"];
+        var configPlatform = baseConfig["Platform"];
         var environment = cmdEnv ?? envVarEnv ?? configEnv ?? "dev";
+        var platform = cmdPlatform ?? configPlatform ?? "ios";
+        Environment.SetEnvironmentVariable("PLATFORM", platform);
 
         var config = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("Config/appsettings.json", optional: false)
-            .AddJsonFile($"Config/appsettings.{environment}.json", optional: true)
+            .AddJsonFile($"Config/appsettings.{platform}.{environment}.json", optional: true)
             .Build();
 
         Settings = config.GetSection("AppConfig").Get<AppConfig>() ?? new AppConfig();

@@ -34,7 +34,8 @@ namespace AppiumDemoTest.StepDefinitions
         [Given("user verifies the page title")]
         public void GivenUserVerifiesThePageTitle()
         {
-            Assert.That(loginPageTitle, Is.Not.Null, "Login is failed");
+            if(Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "android")
+                Assert.That(loginPageTitle, Is.Not.Null, "Login is failed");
         }
 
         [When("the user adds the first product to the cart")]

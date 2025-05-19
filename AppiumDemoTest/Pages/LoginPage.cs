@@ -1,10 +1,6 @@
-﻿using AppiumDemoTest.Config;
-using NUnit.Framework;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
-using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Support.UI;
-using Reqnroll.Configuration.JsonConfig;
 
 namespace AppiumDemoTest.Pages
 {
@@ -17,11 +13,24 @@ namespace AppiumDemoTest.Pages
             Driver = _driver ?? throw new ArgumentNullException("WebDriver not found");
         }
 
+        private By UsernameField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeTextField[@name=\"Username input field\"]")
+            : MobileBy.XPath("//android.widget.EditText[@content-desc=\"Username input field\"]");
 
-        private By UsernameField => MobileBy.XPath("//android.widget.EditText[@content-desc=\"Username input field\"]");
-        private By PasswordField => MobileBy.XPath("//android.widget.EditText[@content-desc=\"Password input field\"]");
-        private By LoginButton => MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Login button\"]");
-        private By ProductsTitle => MobileBy.XPath("//android.widget.TextView[@text=\"Products\"]");
+        private By PasswordField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeSecureTextField[@name=\"Password input field\"]")
+            : MobileBy.XPath("//android.widget.EditText[@content-desc=\"Password input field\"]");
+           private By LoginButton => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeOther[@name=\"Login button\"]")
+            : MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Login button\"]");
+         private By ProductsTitle => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeStaticText[@name=\"Products\"]")
+            : MobileBy.XPath("//android.widget.TextView[@text=\"Products\"]");
+           private By CatalogLink => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeButton[@name=\"tab bar option catalog\"]")
+            : MobileBy.XPath("//android.widget.TextView[@text=\"Products\"]");
+
+     
         private string username = ConfigReader.Settings.Username;
         private string password = ConfigReader.Settings.Password;
 
@@ -39,13 +48,23 @@ namespace AppiumDemoTest.Pages
         {
             wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
 
-            var usernameField = (AppiumElement)wait.Until(driver => driver.FindElement(UsernameField));
-            usernameField.SendKeys(username);
-            Driver?.FindElement(PasswordField).SendKeys(password);
-            Driver?.FindElement(LoginButton).Click();
+            
+            if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "android")
+            {
+                var usernameField = (AppiumElement)wait.Until(driver => driver.FindElement(UsernameField));
+                usernameField.SendKeys(username);
+                Driver?.FindElement(PasswordField).SendKeys(password);
+                Driver?.FindElement(LoginButton).Click();
+
+            }
+                       
+            if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios")
+            {
+                Driver?.FindElement(CatalogLink).Click();
+                
+            }
             var productsTitle = (AppiumElement)wait.Until(driver => driver.FindElement(ProductsTitle));
             return productsTitle;
-
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AppiumDemoTest.Config;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Android;
 using OpenQA.Selenium.Appium.Enums;
@@ -10,9 +11,22 @@ namespace AppiumTestProject.Drivers
     public class DriverFactory
     {
         public static AppiumDriver? driver;
+        private static ICommandExecutor serverUri;
 
         public static AppiumDriver InitDriver()
         {
+
+            var app = ConfigReader.Settings.App;
+            if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "android")
+            {
+
+                app = Directory.GetCurrentDirectory() + "\\Apk\\" + ConfigReader.Settings.App;
+            }
+
+            else
+            {
+                app = ConfigReader.Settings.App;
+            }
 
             var options = new AppiumOptions
             {
@@ -20,16 +34,18 @@ namespace AppiumTestProject.Drivers
                 DeviceName = ConfigReader.Settings.DeviceName,
                 PlatformVersion = ConfigReader.Settings.PlatformVersion,
                 AutomationName = ConfigReader.Settings.AutomationName,
-                App= ConfigReader.Settings.App
+                App= app
             };
 
-            Uri serverUri = new Uri("http://127.0.0.1:4723");
+            Uri serverUri = new Uri(ConfigReader.Settings.Host);      
+            
 
-            if (ConfigReader.Settings.PlatformName.ToLower() == "android")
+            if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "android")
             {
+
                 return new AndroidDriver(serverUri, options);
             }
-            else if (ConfigReader.Settings.PlatformName.ToLower() == "ios")
+            else if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios")
             {
                 return new IOSDriver(serverUri, options);
             }

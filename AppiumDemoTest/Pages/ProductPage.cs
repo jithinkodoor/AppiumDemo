@@ -16,15 +16,24 @@ namespace AppiumDemoTest.Pages
         public ProductPage(AppiumDriver _driver) : base(_driver)
         {
             Driver = _driver ?? throw new ArgumentNullException("WebDriver not found");
+            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
         }
 
-        private By FirstProduct => MobileBy.XPath("(//android.view.ViewGroup[@content-desc=\"store item\"])[1]/android.view.ViewGroup[1]/android.widget.ImageView");
-        private By AddToCartButton => MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Add To Cart button\"]");
-        private By cartCount => MobileBy.XPath("//android.widget.TextView[@text=\"1\"]");
+        private By FirstProduct => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+           ? MobileBy.XPath("//XCUIElementTypeOther[@name=\"Sauce Labs Backpack\"]")
+           : MobileBy.XPath("(//android.view.ViewGroup[@content-desc=\"store item\"])[1]/android.view.ViewGroup[1]/android.widget.ImageView");
+
+        private By AddToCartButton => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+          ? MobileBy.XPath("//XCUIElementTypeOther[@name=\"Add To Cart button\"]")
+          : MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Add To Cart button\"]");
+        private By cartCount => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+            ? MobileBy.XPath("//XCUIElementTypeOther[@name='Add To Cart button']")
+            : MobileBy.XPath("//android.widget.TextView[@text=\"1\"]");
+
 
         public void AddFirstProductToCart()
         {
-            wait = new WebDriverWait(Driver, TimeSpan.FromSeconds(10));
+            
 
             var firstProduct = (AppiumElement)wait.Until(driver => driver.FindElement(FirstProduct));
             firstProduct.Click();
@@ -34,8 +43,7 @@ namespace AppiumDemoTest.Pages
         }
         public AppiumElement VerifyCartCount()
         {
-           return Driver!.FindElement(cartCount);           
-
+           return (AppiumElement)wait.Until(driver => driver.FindElement(cartCount));
         }
     }
 }

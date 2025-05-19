@@ -7,19 +7,29 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU;ARM32</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Config\appsettings.dev.json" />
+    <None Remove="Config\appsettings.android.dev.json" />
+    <None Remove="Config\appsettings.android.sit.json" />
+    <None Remove="Config\appsettings.ios.dev.json" />
+    <None Remove="Config\appsettings.ios.sit.json" />
     <None Remove="Config\appsettings.json" />
-    <None Remove="Config\appsettings.sit.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Config\appsettings.dev.json">
+    <Content Include="Config\appsettings.ios.sit.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Config\appsettings.sit.json">
+    <Content Include="Config\appsettings.ios.dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\appsettings.android.dev.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\appsettings.android.sit.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Config\appsettings.json">
@@ -44,6 +54,16 @@
     <PackageReference Include="Reqnroll" Version="2.4.1" />
     <PackageReference Include="Reqnroll.NUnit" Version="2.4.1" />
     <PackageReference Include="Selenium.Support" Version="4.32.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="Apk\AppiumDemo4.apk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Apk\AppiumDemo4.ipa">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
