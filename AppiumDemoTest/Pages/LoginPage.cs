@@ -8,31 +8,28 @@ namespace AppiumDemoTest.Pages
     {
         private new readonly AppiumDriver? Driver;
 
-        public LoginPage(AppiumDriver _driver) : base(_driver) 
-        {
-            Driver = _driver ?? throw new ArgumentNullException("WebDriver not found");
-        }
+        public LoginPage(AppiumDriver _driver, Exception argumentNullException) : base(_driver) => Driver = _driver ?? throw argumentNullException;
 
-        private By UsernameField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+        private static By UsernameField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
             ? MobileBy.XPath("//XCUIElementTypeTextField[@name=\"Username input field\"]")
             : MobileBy.XPath("//android.widget.EditText[@content-desc=\"Username input field\"]");
 
-        private By PasswordField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+        private static By PasswordField => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
             ? MobileBy.XPath("//XCUIElementTypeSecureTextField[@name=\"Password input field\"]")
             : MobileBy.XPath("//android.widget.EditText[@content-desc=\"Password input field\"]");
-           private By LoginButton => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+           private static By LoginButton => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
             ? MobileBy.XPath("//XCUIElementTypeOther[@name=\"Login button\"]")
             : MobileBy.XPath("//android.view.ViewGroup[@content-desc=\"Login button\"]");
-         private By ProductsTitle => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+         private static By ProductsTitle => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
             ? MobileBy.XPath("//XCUIElementTypeStaticText[@name=\"Products\"]")
             : MobileBy.XPath("//android.widget.TextView[@text=\"Products\"]");
-           private By CatalogLink => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
+           private static By CatalogLink => Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "ios"
             ? MobileBy.XPath("//XCUIElementTypeButton[@name=\"tab bar option catalog\"]")
             : MobileBy.XPath("//android.widget.TextView[@text=\"Products\"]");
 
      
-        private string username = ConfigReader.Settings.Username;
-        private string password = ConfigReader.Settings.Password;
+        private readonly string username = ConfigReader.Settings.Username;
+        private readonly string password = ConfigReader.Settings.Password;
 
 
         public void EnterUsername(string username)

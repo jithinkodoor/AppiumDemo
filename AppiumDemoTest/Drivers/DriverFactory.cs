@@ -11,7 +11,7 @@ namespace AppiumTestProject.Drivers
     public class DriverFactory
     {
         public static AppiumDriver? driver;
-        private static ICommandExecutor serverUri;
+        //private static ICommandExecutor serverUri;
 
         public static AppiumDriver InitDriver()
         {
@@ -37,7 +37,7 @@ namespace AppiumTestProject.Drivers
                 App= app
             };
 
-            Uri serverUri = new Uri(ConfigReader.Settings.Host);      
+            Uri? serverUri = new(ConfigReader.Settings.Host);      
             
 
             if (Environment.GetEnvironmentVariable("PLATFORM")?.ToLower() == "android")
